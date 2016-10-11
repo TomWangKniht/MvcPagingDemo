@@ -1,0 +1,120 @@
+﻿@model MvcPagingDemo.Models.ViewModel.PagerDemoListViewModel
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+@using (Html.BeginForm("PagingListPost", "PagerDemo", FormMethod.Post, new { id = "pagerForm" }))
+{
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-3">
+                @Html.Label("姓名")
+                @Html.TextBoxFor(p => p.Search)
+            </div>
+            <div class="col-sm-3">
+                @Html.Label("分類")
+                @*@Html.TextBoxFor(p => p.Search)*@
+                @Html.DropDownList("SelValue", null, "全部")
+            </div>
+
+            <button class="btn btn-primary button-control" type="submit">查詢</button>
+        </div>
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.No)*@
+            序號
+        </th>
+        <th>
+            姓名
+            @*@Html.DisplayNameFor(model => model.Name)*@
+        </th>
+        <th>
+            分類
+            @*@Html.DisplayNameFor(model => model.Name)*@
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.DataList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+        </tr>
+    }
+
+</table>
+<div class="pager">
+    @Html.Pager(Model.DataList.PageSize, Model.DataList.PageNumber, Model.DataList.TotalItemCount).Options(o => o
+    .AddRouteValueFor(m => m.SelValue)
+    .AddRouteValueFor(m => m.Search)
+    .DisplayFirstAndLastPage()
+    //.SetFirstPageText("First")
+    //.SetLastPageText("Last")
+    //.SetPreviousPageText("Prev")
+    //.SetNextPageText("Next")
+    )
+    Displaying @Model.DataList.ItemStart - @Model.DataList.ItemEnd of @Model.DataList.TotalItemCount item(s)
+</div>
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+
+            // Fields
+            var _pageLinkers = $(".pager> a");
+
+            // Binding click event
+            _pageLinkers.each(function (i, item) {
+                var page = getParameterByName($(item).attr('href'), 'page')
+                var SelValue = getParameterByName($(item).attr('href'), 'SelValue')
+                var Search = getParameterByName($(item).attr('href'), 'Search')
+                $(item).attr('href', '#').click(function () { postPage(Search, SelValue, page); });
+            });
+
+        });
+
+
+        function getParameterByName(url, name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(url);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        function postPage(Search, SelValue, page) {
+            var targetFormID = '#pagerForm';
+            if ($(targetFormID).size() > 0) {
+                $('<input>')
+                    .attr({ type: 'hidden', id: 'page', name: 'page', value: page })
+                    .appendTo($(targetFormID));
+
+                $('<input>')
+                    .attr({ type: 'hidden', id: 'Search', name: 'Search', value: Search })
+                    .appendTo($(targetFormID));
+                $('<input>')
+                    .attr({ type: 'hidden', id: 'SelValue', name: 'SelValue', value: SelValue })
+                    .appendTo($(targetFormID));
+                $(targetFormID).submit();
+            }
+        };
+
+
+
+    </script>
+
+}
+
+

@@ -1,0 +1,78 @@
+﻿@model MvcPagingDemo.Models.ViewModel.PagerDemoListViewModel
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+@using (Html.BeginForm())
+            {
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-sm-3">
+                @Html.Label("姓名")
+                @Html.TextBoxFor(p => p.Search)
+            </div>
+            <div class="col-sm-3">
+                @Html.Label("分類")
+                @*@Html.TextBoxFor(p => p.Search)*@
+                @Html.DropDownList("SelValue", null, "全部")
+            </div>
+
+            <button class="btn btn-primary button-control" type="submit">查詢</button>
+        </div>
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            @*@Html.DisplayNameFor(model => model.No)*@
+            序號
+        </th>
+        <th>
+            姓名
+            @*@Html.DisplayNameFor(model => model.Name)*@
+        </th>
+        <th>
+            分類
+            @*@Html.DisplayNameFor(model => model.Name)*@
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.DataList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>*@
+        </tr>
+    }
+
+</table>
+<div class="pager">
+    @Html.Pager(Model.DataList.PageSize, Model.DataList.PageNumber, Model.DataList.TotalItemCount).Options(o => o
+    .AddRouteValueFor(m => m.SelValue)
+    .AddRouteValueFor(m => m.Search)
+    .DisplayFirstAndLastPage()
+    //.SetFirstPageText("First")
+    //.SetLastPageText("Last")
+    //.SetPreviousPageText("Prev")
+    //.SetNextPageText("Next")
+    )
+    Displaying @Model.DataList.ItemStart - @Model.DataList.ItemEnd of @Model.DataList.TotalItemCount item(s)
+</div>
+
+
