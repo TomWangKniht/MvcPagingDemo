@@ -1,4 +1,5 @@
 ﻿using MvcPagingDemo.Models.ViewModel;
+using MvcPagingDemo.Service.api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Web;
 
 namespace MvcPagingDemo.Service.fake
 {
-    public class IntroduceServiceFake
+    public class IntroduceServiceFake: IIntroduceService
     {
         public IEnumerable<ReferenceViewModel> getReferences()
         {
