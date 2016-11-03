@@ -95,8 +95,9 @@
         }
 
         function postPage(Search, SelValue, page) {
+
             var targetFormID = '#pagerForm';
-            if ($(targetFormID).size() > 0) {
+            if ($(targetFormID).length > 0) {
                 $('<input>')
                     .attr({ type: 'hidden', id: 'page', name: 'page', value: page })
                     .appendTo($(targetFormID));
@@ -110,11 +111,7 @@
                 $(targetFormID).submit();
             }
         };
-
-
-
     </script>
-
 }
 
 
